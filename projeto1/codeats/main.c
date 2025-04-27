@@ -31,6 +31,8 @@ Status client_status[N_CLIENTS];
 int cook_current[N_COOKS];
 int client_current[N_CLIENTS];
 
+// Função de visualização do programa
+// Imprime o estado global do restaurante cada vez que uma mudança de estado notável ocorre
 void imprime_estado_global() {
     pthread_mutex_lock(&print_mutex);
     printf("\033[2J\033[H");
@@ -102,6 +104,7 @@ void *cozinheiro(void *arg) {
 void *cliente(void *arg) {
     int id = (intptr_t)arg;
     while (1) {
+
         // Espera por prato disponível
         sem_wait(&full);
 
@@ -151,7 +154,7 @@ int main() {
     for (int i = 0; i < N_COOKS;   i++) pthread_join(cooks[i],   NULL);
     for (int i = 0; i < N_CLIENTS; i++) pthread_join(clients[i], NULL);
 
-    // // Limpeza (desnecessário se o programa for encerrado só fechando o terminal)
+    // // Limpeza (iria ser usado se o programa não fosse encerrado pelo próprio terminal)
     // sem_destroy(&empty);
     // sem_destroy(&full);
     // pthread_mutex_destroy(&mutex);
